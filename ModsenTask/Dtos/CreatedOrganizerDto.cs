@@ -1,5 +1,8 @@
-﻿namespace ModsenTask.Dtos;
+﻿using Swashbuckle.AspNetCore.Annotations;
 
+namespace ModsenTask.Dtos;
+
+[SwaggerSchema("The response body for created organizer")]
 public class CreatedOrganizerDto
 {
     public Guid Id { get; set; }

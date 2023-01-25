@@ -1,5 +1,8 @@
-﻿namespace ModsenTask.Dtos;
+﻿using Swashbuckle.AspNetCore.Annotations;
 
+namespace ModsenTask.Dtos;
+
+[SwaggerSchema("A request body to login organizer")]
 public class LoginDto
 {
     public string Name { get; set; } = default!;

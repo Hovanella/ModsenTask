@@ -20,9 +20,7 @@ public class EventProfile : Profile
         CreateMap<Event, DeletedEventDto>().ForMember(e => e.OrganizerName, opt => opt.MapFrom(e => e.Organizer.Name))
             .ForMember(e => e.SpeakerName, opt => opt.MapFrom(e => e.Speaker.Name));
 
-        CreateMap<RegisterOrganizerDto, Organizer>().ForMember(e => e.Password, opt => opt.Ignore());
-        CreateMap<Organizer, RegisteredOrganizerDto>().ForMember(e => e.Password, opt => opt.Ignore());
-
+        
         CreateMap<CreateEventDto, Event>();
 
         CreateMap<UpdateEventDto, Event>();

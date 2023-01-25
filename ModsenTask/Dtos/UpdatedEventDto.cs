@@ -1,5 +1,8 @@
-﻿namespace ModsenTask.Dtos;
+﻿using Swashbuckle.AspNetCore.Annotations;
 
+namespace ModsenTask.Dtos;
+
+[SwaggerSchema("A response body for updated event")]
 public class UpdatedEventDto
 {
     public Guid Id { get; set; }

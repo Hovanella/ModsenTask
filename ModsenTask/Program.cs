@@ -1,9 +1,11 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ModsenTask.Data;
+using ModsenTask.ErrorHandlers;
 using ModsenTask.Repositories;
 using ModsenTask.Repositories.Interfaces;
 using ModsenTask.Services;
@@ -20,6 +22,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.EnableAnnotations();
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -67,6 +70,18 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = async context =>
+        {
+            context.Response.StatusCode = 401;
+            context.Response.ContentType = "application/json";
+            const string errorMessage = "You are not authorized to access this resource.";
+            var result = JsonSerializer.Serialize(new { message = errorMessage });
+            await context.Response.WriteAsync(result);
+            context.HandleResponse();
+        }
+    };
 });
 
 builder.Services.AddScoped<IEventService, EventService>();
@@ -90,9 +105,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
+
 
 app.Run();

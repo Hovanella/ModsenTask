@@ -1,7 +1,12 @@
-﻿namespace ModsenTask.Dtos;
+﻿using Swashbuckle.AspNetCore.Annotations;
 
+namespace ModsenTask.Dtos;
+
+[SwaggerSchema("A response body for a selected event")]
 public class EventViewDto
 {
+    public Guid Id { get; set; }
+
     public string Name { get; set; } = default!;
 
     public string Description { get; set; } = default!;

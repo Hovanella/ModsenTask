@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ModsenTask.Dtos;
+using ModsenTask.Exceptions;
 using ModsenTask.Models;
 using ModsenTask.Repositories.Interfaces;
 using ModsenTask.Services.Interfaces;
@@ -32,7 +33,9 @@ public class EventService : IEventService
 
     public async Task<EventViewDto?> GetEventByIdAsync(Guid id)
     {
-        return _mapper.Map<EventViewDto>(await _eventRepository.GetEventByIdAsync(id));
+        var eventById = await _eventRepository.GetEventByIdAsync(id) ??
+                        throw new KeyNotFoundException("Event with this id does not exist");
+        return _mapper.Map<EventViewDto>(eventById);
     }
 
     public async Task<CreatedEventDto> CreateEventAsync(CreateEventDto newCreateEventDto)
@@ -46,7 +49,7 @@ public class EventService : IEventService
         var organizerId =
             new Guid(_httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!);
         var organizer = await _organizerRepository.GetOrganizerByIdAsync(organizerId) ??
-                        throw new BadHttpRequestException("Organizer not found");
+                        throw new KeyNotFoundException("Organizer not found");
 
         var newEvent = _mapper.Map<Event>(newCreateEventDto);
         newEvent.Speaker = speaker;
@@ -58,21 +61,21 @@ public class EventService : IEventService
     public async Task<UpdatedEventDto> UpdateEventAsync(Guid id, UpdateEventDto updateEventDto)
     {
         var eventToUpdate = await _eventRepository.GetEventByIdAsync(id) ??
-                            throw new BadHttpRequestException($"Event with id {id} not found");
+                            throw new KeyNotFoundException($"Event with id {id} not found");
         var currentOrganizerId =
             new Guid(_httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!);
-        
+
         if (eventToUpdate.OrganizerId != currentOrganizerId)
-            throw new BadHttpRequestException("You are not allowed to update this event");
+            throw new ForbiddenEventException("You are not allowed to update this event");
 
         var updatedEvent = _mapper.Map<Event>(updateEventDto);
-        
+
         var updatedSpeaker = await _speakerRepository.GetSpeakerByNameAsync(updateEventDto.SpeakerName) ??
                              await _speakerRepository.CreateSpeakerAsync(new Speaker
                              {
                                  Name = updateEventDto.SpeakerName
                              });
-        
+
         updatedEvent.Id = id;
         updatedEvent.SpeakerId = updatedSpeaker.Id;
         updatedEvent.OrganizerId = eventToUpdate.OrganizerId;
@@ -83,11 +86,11 @@ public class EventService : IEventService
     public async Task<DeletedEventDto> DeleteEventAsync(Guid id)
     {
         var eventToDelete = await _eventRepository.GetEventByIdAsync(id) ??
-                            throw new BadHttpRequestException($"Event with id {id} not found");
-        
+                            throw new ArgumentException($"Event with id {id} not found");
+
         var currentOrganizerId =
             new Guid(_httpContextAccessor.HttpContext?.User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value!);
-        
+
         if (eventToDelete.OrganizerId != currentOrganizerId)
             throw new BadHttpRequestException("You are not allowed to delete this event");
 

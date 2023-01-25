@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ModsenTask.Models;
+﻿namespace ModsenTask.Models;
 
 public class Event
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; } = Guid.NewGuid();
 
     public string Name { get; set; } = default!;

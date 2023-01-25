@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using ModsenTask.Dtos;
+using ModsenTask.Exceptions;
 using ModsenTask.Models;
 using ModsenTask.Repositories.Interfaces;
 using ModsenTask.Services.Interfaces;
@@ -56,7 +57,13 @@ public class AuthService : IAuthService
         var organizer = _mapper.Map<Organizer>(registerOrganizerDto);
         organizer.Password = BCrypt.Net.BCrypt.HashPassword(registerOrganizerDto.Password);
 
+        if (await _organizerRepository.GetOrganizerByNameAsync(organizer.Name) != null)
+            throw new NameAlreadyExistsException("Organizer with this name already exists");
+
         var createdOrganizer = await _organizerRepository.CreateOrganizerAsync(organizer);
-        return _mapper.Map<RegisteredOrganizerDto>(createdOrganizer);
+        var createdOrganizerDto = _mapper.Map<RegisteredOrganizerDto>(createdOrganizer);
+        createdOrganizerDto.Password = createdOrganizer.Password;
+
+        return createdOrganizerDto;
     }
 }
