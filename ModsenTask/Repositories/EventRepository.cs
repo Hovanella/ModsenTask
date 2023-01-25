@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModsenTask.Data;
-using ModsenTask.Domain.Models;
+using ModsenTask.Models;
 using ModsenTask.Repositories.Interfaces;
 
 namespace ModsenTask.Repositories;
@@ -8,7 +8,7 @@ namespace ModsenTask.Repositories;
 public class EventRepository : IEventRepository
 {
     private readonly DataContext _context;
-    
+
     public EventRepository(DataContext context)
     {
         _context = context;
@@ -16,12 +16,13 @@ public class EventRepository : IEventRepository
 
     public async Task<IEnumerable<Event>> GetAllEventsAsync()
     {
-        return await _context.Events.Include(e => e.Organizer).Include(e=>e.Speaker).ToListAsync();
+        return await _context.Events.Include(e => e.Organizer).Include(e => e.Speaker).ToListAsync();
     }
 
     public async Task<Event?> GetEventByIdAsync(Guid id)
     {
-        return await _context.Events.Include(e => e.Organizer).Include(e=>e.Speaker).FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Events.Include(e => e.Organizer).Include(e => e.Speaker)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Event> CreateEventAsync(Event newEvent)

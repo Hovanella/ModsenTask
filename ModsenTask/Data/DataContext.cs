@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModsenTask.Domain.Models;
+using ModsenTask.Models;
 
 namespace ModsenTask.Data;
 
@@ -13,7 +13,7 @@ public class DataContext : DbContext
 
     public DbSet<Speaker> Speakers { get; set; }
 
-    public DbSet<Organizer> Users { get; set; }
+    public DbSet<Organizer> Organizers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,7 +21,7 @@ public class DataContext : DbContext
             .HasOne(e => e.Speaker)
             .WithMany(s => s.Events)
             .HasForeignKey(e => e.SpeakerId);
-        
+
         modelBuilder.Entity<Event>()
             .HasOne(e => e.Organizer)
             .WithMany(u => u.Events)

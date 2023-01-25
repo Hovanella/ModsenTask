@@ -1,17 +1,33 @@
-﻿using ModsenTask.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ModsenTask.Data;
+using ModsenTask.Models;
 using ModsenTask.Repositories.Interfaces;
 
 namespace ModsenTask.Repositories;
 
 public class OrganizerRepository : IOrganizerRepository
 {
-    public Task<Organizer> GetOrganizerByIdAsync(int id)
+    private readonly DataContext _context;
+
+    public OrganizerRepository(DataContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
 
-    public Task<Organizer> GetOrganizerByIdAsync(Guid id)
+    public async Task<Organizer?> GetOrganizerByNameAsync(string name)
     {
-        throw new NotImplementedException();
+        return await _context.Organizers.FirstOrDefaultAsync(x => x.Name == name);
+    }
+
+    public async Task<Organizer> CreateOrganizerAsync(Organizer organizer)
+    {
+        var created = (await _context.Organizers.AddAsync(organizer)).Entity;
+        await _context.SaveChangesAsync();
+        return created;
+    }
+
+    public Task<Organizer?> GetOrganizerByIdAsync(Guid organizerId)
+    {
+        return _context.Organizers.FirstOrDefaultAsync(x => x.Id == organizerId);
     }
 }

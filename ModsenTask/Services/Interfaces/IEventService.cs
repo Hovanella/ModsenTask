@@ -1,6 +1,4 @@
-﻿using ModsenTask.Controllers;
-using ModsenTask.Domain.Models;
-using ModsenTask.Dtos;
+﻿using ModsenTask.Dtos;
 
 namespace ModsenTask.Services.Interfaces;
 
@@ -13,6 +11,6 @@ public interface IEventService
     Task<CreatedEventDto> CreateEventAsync(CreateEventDto newCreateEvent);
 
     Task<UpdatedEventDto> UpdateEventAsync(Guid id, UpdateEventDto updateEventDto);
-    
+
     Task<DeletedEventDto> DeleteEventAsync(Guid id);
 }

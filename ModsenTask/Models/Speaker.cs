@@ -1,4 +1,4 @@
-﻿namespace ModsenTask.Domain.Models;
+﻿namespace ModsenTask.Models;
 
 public class Speaker
 {

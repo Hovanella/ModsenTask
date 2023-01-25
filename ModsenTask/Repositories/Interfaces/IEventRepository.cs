@@ -1,4 +1,4 @@
-﻿using ModsenTask.Domain.Models;
+﻿using ModsenTask.Models;
 
 namespace ModsenTask.Repositories.Interfaces;
 
@@ -11,6 +11,6 @@ public interface IEventRepository
     Task<Event> CreateEventAsync(Event newEvent);
 
     Task<Event> UpdateEventAsync(Event eventToUpdate, Event updatedEvent);
-    
+
     Task<Event> DeleteEventAsync(Event eventToDelete);
 }

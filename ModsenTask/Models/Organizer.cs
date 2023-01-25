@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ModsenTask.Domain.Models;
+namespace ModsenTask.Models;
 
 [Table("Organizers")]
 public class Organizer

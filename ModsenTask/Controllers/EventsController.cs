@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ModsenTask.Dtos;
 using ModsenTask.Services.Interfaces;
 
@@ -30,19 +32,22 @@ public class EventsController : Controller
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> CreateEventAsync([FromBody] CreateEventDto createEventDto)
     {
         var createdEvent = await _eventService.CreateEventAsync(createEventDto);
-        return Created(new Uri($"{Request.Path}/{createdEvent.Id}",UriKind.Relative), createdEvent);
+        return Created(new Uri($"{Request.Path}/{createdEvent.Id}", UriKind.Relative), createdEvent);
     }
-    
+
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> UpdateEventAsync(Guid id, [FromBody] UpdateEventDto updateEventDto)
     {
         return Ok(await _eventService.UpdateEventAsync(id, updateEventDto));
     }
-    
+
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> DeleteEventAsync(Guid id)
     {
         return Ok(await _eventService.DeleteEventAsync(id));

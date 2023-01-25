@@ -1,4 +1,4 @@
-﻿using ModsenTask.Domain.Models;
+﻿using ModsenTask.Models;
 
 namespace ModsenTask.Repositories.Interfaces;
 

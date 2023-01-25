@@ -12,8 +12,8 @@ using ModsenTask.Data;
 namespace ModsenTask.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230124185132_DropRoleModel")]
-    partial class DropRoleModel
+    [Migration("20230125094809_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ModsenTask.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Event", b =>
+            modelBuilder.Entity("ModsenTask.Models.Event", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace ModsenTask.Data.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Organizer", b =>
+            modelBuilder.Entity("ModsenTask.Models.Organizer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,10 +77,10 @@ namespace ModsenTask.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Organizers");
                 });
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Speaker", b =>
+            modelBuilder.Entity("ModsenTask.Models.Speaker", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,15 +95,15 @@ namespace ModsenTask.Data.Migrations
                     b.ToTable("Speakers");
                 });
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Event", b =>
+            modelBuilder.Entity("ModsenTask.Models.Event", b =>
                 {
-                    b.HasOne("ModsenTask.Domain.Models.Organizer", "Organizer")
+                    b.HasOne("ModsenTask.Models.Organizer", "Organizer")
                         .WithMany("Events")
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModsenTask.Domain.Models.Speaker", "Speaker")
+                    b.HasOne("ModsenTask.Models.Speaker", "Speaker")
                         .WithMany("Events")
                         .HasForeignKey("SpeakerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -114,12 +114,12 @@ namespace ModsenTask.Data.Migrations
                     b.Navigation("Speaker");
                 });
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Organizer", b =>
+            modelBuilder.Entity("ModsenTask.Models.Organizer", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("ModsenTask.Domain.Models.Speaker", b =>
+            modelBuilder.Entity("ModsenTask.Models.Speaker", b =>
                 {
                     b.Navigation("Events");
                 });
