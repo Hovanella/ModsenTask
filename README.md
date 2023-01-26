@@ -25,8 +25,7 @@ Set your connection string to MS Server in "ConnectionStrings/DefaultConnection"
 Create Database using CLI 
 
 ```bash
-dotnet ef database update --project ModsenTask\ModsenTask.csproj --startup-project ModsenTask\ModsenTask.csproj --context ModsenTask.Data
-.DataContext --configuration Debug 20230125094809_Initial
+dotnet ef database update --project ModsenTask.csproj --startup-project ModsenTask.csproj --context ModsenTask.Data.DataContext --configuration Debug 20230125094809_Initial
 
 ```
 
