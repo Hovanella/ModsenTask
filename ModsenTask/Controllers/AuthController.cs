@@ -31,7 +31,7 @@ public class AuthController : Controller
 
     [HttpPost("register")]
     [SwaggerOperation(Summary = "Register to the system", Description = "Register to the system")]
-    [SwaggerResponse(200, Type = typeof(string), Description = "200 OK : Returns the jwt-token of the organizer")]
+    [SwaggerResponse(200, Type = typeof(RegisteredOrganizerDto), Description = "200 OK : Returns the registered organizer")]
     [SwaggerResponse(400, Description = "400 Bad Request : The request Body is not valid")]
     [SwaggerResponse(409, Description = "409 Conflict : The name is already in use")]
     public async Task<IActionResult> Register([FromBody] RegisterOrganizerDto registerOrganizerDto)

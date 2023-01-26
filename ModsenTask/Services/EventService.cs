@@ -28,6 +28,10 @@ public class EventService : IEventService
     public async Task<IEnumerable<EventViewDto>> GetAllEventsAsync()
     {
         var events = await _eventRepository.GetAllEventsAsync();
+        
+        if (!events.Any())
+            throw new EventsNotFoundException("No events found");
+        
         return _mapper.Map<IEnumerable<EventViewDto>>(events);
     }
 

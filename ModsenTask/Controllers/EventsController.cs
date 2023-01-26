@@ -28,7 +28,7 @@ public class EventsController : Controller
     public async Task<IActionResult> GetAllEventsAsync()
     {
         var events = await _eventService.GetAllEventsAsync();
-        return !events.Any() ? NotFound() : Ok(events);
+        return Ok(events);
     }
 
     [HttpGet("{id}")]
@@ -57,7 +57,7 @@ public class EventsController : Controller
 
     [HttpPut("{id}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [SwaggerOperation(Summary = "Creates an event with the specified id.",
+    [SwaggerOperation(Summary = "Updates an event with the specified id.",
         Description = "Updates an event with the specified id.")]
     [SwaggerResponse(200, Type = typeof(UpdatedEventDto), Description = "200 OK: Event was updated successfully.")]
     [SwaggerResponse(400, Description = "400 Bad Request: The request body is not valid.")]

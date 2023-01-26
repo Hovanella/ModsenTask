@@ -27,6 +27,7 @@ public class ErrorHandlerMiddleware
 
             response.StatusCode = error switch
             {
+               EventsNotFoundException => (int)HttpStatusCode.NotFound,
                 KeyNotFoundException e =>
                     (int)HttpStatusCode.NotFound,
                 ArgumentException e =>
